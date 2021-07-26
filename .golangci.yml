@@ -14,11 +14,11 @@ linters:
     - deadcode
     - gofmt
     - goimports
-    - golint
     - govet
     - importas
     - ineffassign
     - misspell
+    - revive
     - staticcheck
     - structcheck
     - typecheck
@@ -38,5 +38,5 @@ linters-settings:
 issues:
   exclude-rules:
     - linters:
-        - golint
+        - revive
       text: "stutters"
