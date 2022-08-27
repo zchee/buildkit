@@ -75,6 +75,7 @@ const (
 
 	CapRemoteCacheGHA apicaps.CapID = "cache.gha"
 	CapRemoteCacheS3  apicaps.CapID = "cache.s3"
+	CapRemoteCacheGCS apicaps.CapID = "cache.gcs"
 
 	CapMergeOp apicaps.CapID = "mergeop"
 	CapDiffOp  apicaps.CapID = "diffop"
