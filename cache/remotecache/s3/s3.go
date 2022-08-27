@@ -328,7 +328,7 @@ func (i *importer) Resolve(ctx context.Context, _ ocispecs.Descriptor, id string
 }
 
 type readerAt struct {
-	ReaderAtCloser
+	remotecache.ReaderAtCloser
 	size int64
 }
 
@@ -449,7 +449,7 @@ func (s3Client *s3Client) touch(ctx context.Context, key string) error {
 }
 
 func (s3Client *s3Client) ReaderAt(ctx context.Context, desc ocispecs.Descriptor) (content.ReaderAt, error) {
-	readerAtCloser := toReaderAtCloser(func(offset int64) (io.ReadCloser, error) {
+	readerAtCloser := remotecache.ToReaderAtCloser(func(offset int64) (io.ReadCloser, error) {
 		return s3Client.getReader(ctx, s3Client.blobKey(desc.Digest))
 	})
 	return &readerAt{ReaderAtCloser: readerAtCloser, size: desc.Size}, nil

@@ -326,7 +326,7 @@ func (i *importer) Resolve(ctx context.Context, _ ocispecs.Descriptor, id string
 }
 
 type readerAt struct {
-	ReaderAtCloser
+	remotecache.ReaderAtCloser
 	size int64
 }
 
@@ -442,7 +442,7 @@ func (c *gcsClient) touch(ctx context.Context, name string) error {
 }
 
 func (c *gcsClient) ReaderAt(ctx context.Context, desc ocispecs.Descriptor) (content.ReaderAt, error) {
-	readerAtCloser := toReaderAtCloser(func(offset int64) (io.ReadCloser, error) {
+	readerAtCloser := remotecache.ToReaderAtCloser(func(offset int64) (io.ReadCloser, error) {
 		return c.getReader(ctx, c.blobKey(desc.Digest))
 	})
 

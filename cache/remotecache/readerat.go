@@ -1,4 +1,4 @@
-package s3
+package remotecache
 
 import (
 	"io"
@@ -17,7 +17,7 @@ type readerAtCloser struct {
 	closed bool
 }
 
-func toReaderAtCloser(open func(offset int64) (io.ReadCloser, error)) ReaderAtCloser {
+func ToReaderAtCloser(open func(offset int64) (io.ReadCloser, error)) ReaderAtCloser {
 	return &readerAtCloser{
 		open: open,
 	}
