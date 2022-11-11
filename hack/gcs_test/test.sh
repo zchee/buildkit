@@ -1,15 +1,17 @@
 #!/bin/sh -ex
 
+mkdir -p /tmp/data/my-bucket
+touch /tmp/data/my-bucket/test.txt
 /bin/fake-gcs-server -data /tmp/data &
 
-while true; do
-  curl -s -f http://127.0.0.1:4443 >/dev/null && break
-  sleep 1
-done
+# while true; do
+#   curl -s -f http://127.0.0.1:4443/storage/v1 >/dev/null && break
+#   sleep 1
+# done
 
 sleep 2
 # mc alias set myminio http://127.0.0.1:9000 minioadmin minioadmin
-# mc mb myminio/my-bucket
+# gsutil mb http://127.0.0.1:4443/my-bucket
 # mc admin trace myminio &
 
 buildkitd -debugaddr 0.0.0.0:8060 &

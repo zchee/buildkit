@@ -363,23 +363,25 @@ func newGCSClient(ctx context.Context, config Config) (*gcsClient, error) {
 		option.WithScopes(storage.ScopeReadWrite),
 	}
 
+	if endpoint := config.EndpointURL; endpoint != "" {
+		opts = append(opts, option.WithEndpoint(endpoint+"/storage/v1/"))
+	}
+
 	if credsFile := config.Credentials; credsFile != "" {
 		opts = append(opts, option.WithCredentialsFile(credsFile))
 	} else {
-		creds, err := google.DefaultTokenSource(ctx, storage.ScopeReadWrite)
-		if err != nil {
-			return nil, errors.Errorf("could not find default credentials: %w", err)
+		if config.EndpointURL == "" {
+			creds, err := google.DefaultTokenSource(ctx, storage.ScopeReadWrite)
+			if err != nil {
+				return nil, errors.Errorf("could not find default credentials: %v", err)
+			}
+			opts = append(opts, option.WithTokenSource(creds))
 		}
-		opts = append(opts, option.WithTokenSource(creds))
-	}
-
-	if endpoint := config.EndpointURL; endpoint != "" {
-		opts = append(opts, option.WithEndpoint(endpoint))
 	}
 
 	client, err := storage.NewClient(ctx, opts...)
 	if err != nil {
-		return nil, errors.Errorf("could not create storage client: %w", err)
+		return nil, errors.Errorf("could not create storage client: %v", err)
 	}
 
 	return &gcsClient{

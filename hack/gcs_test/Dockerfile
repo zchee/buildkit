@@ -7,7 +7,9 @@ FROM moby/buildkit AS buildkit
 
 FROM gcr.io/google.com/cloudsdktool/cloud-sdk:slim AS gsutil
 
-RUN apt-get update \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+	&& echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" | tee /etc/apt/sources.list.d/docker.list \
+	&& apt-get update \
   && apt-get install -y --no-install-recommends wget ca-certificates containerd curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
