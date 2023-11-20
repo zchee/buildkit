@@ -76,6 +76,7 @@ const (
 	CapRemoteCacheGHA    apicaps.CapID = "cache.gha"
 	CapRemoteCacheS3     apicaps.CapID = "cache.s3"
 	CapRemoteCacheAzBlob apicaps.CapID = "cache.azblob"
+	CapRemoteCacheGCS    apicaps.CapID = "cache.gcs"
 
 	CapMergeOp apicaps.CapID = "mergeop"
 	CapDiffOp  apicaps.CapID = "diffop"
@@ -428,6 +429,12 @@ func init() {
 
 	Caps.Init(apicaps.Cap{
 		ID:      CapRemoteCacheAzBlob,
+		Enabled: true,
+		Status:  apicaps.CapStatusExperimental,
+	})
+
+	Caps.Init(apicaps.Cap{
+		ID:      CapRemoteCacheGCS,
 		Enabled: true,
 		Status:  apicaps.CapStatusExperimental,
 	})
