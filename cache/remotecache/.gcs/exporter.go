@@ -135,8 +135,9 @@ func (ce *exporter) uploadManifest(ctx context.Context, manifestKey string, r io
 
 	bh := ce.client.Bucket(ce.config.Bucket)
 
-	ctx, cancel := context.WithTimeout(ctx, time.Minute*5)
-	defer cancel()
+	ctx, cnclFn := context.WithCancelCause(ctx)
+	ctx, _ = context.WithTimeoutCause(ctx, time.Minute*5, errors.WithStack(context.DeadlineExceeded))
+	defer cnclFn(errors.WithStack(context.Canceled))
 
 	if _, err := bh.Update(ctx, storage.BucketAttrsToUpdate{}); err != nil {
 		return errors.Wrapf(err, "failed to upload blob %s: %v", manifestKey, err)
